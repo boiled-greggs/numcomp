@@ -1,0 +1,281 @@
+\documentclass{article}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usetikzlibrary{shapes,backgrounds}
+
+\title{Numerical Computing HW 3}
+\author{Greg Stewart}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{3.2(b) \normalsize Use Doolittle factorization to solve the following. Calculate $\kappa_{\infty}(A)$.}
+
+\begin{align*}
+  x -2y &= 0 \\ -x + 4y &= 1
+\end{align*}
+
+From this system of equations, we have
+
+$$
+A =
+\begin{pmatrix}
+  1 & -2 \\ -1 & 4 
+\end{pmatrix}
+,\quad
+z =
+\begin{pmatrix} x \\ y \end{pmatrix}
+,\quad
+b =
+\begin{pmatrix} 0 \\ 1 \end{pmatrix}
+$$
+
+And we want to solve the equation $Az = b$. We factor the matrix $A$ into $L$ and $U$ like so
+
+$$
+\begin{pmatrix} 1 & -2 \\ -1 & 4 \end{pmatrix}
+=
+\begin{pmatrix} l_{11} & 0 \\ l_{21} & l_{22} \end{pmatrix}
+\begin{pmatrix} u_{11} & u_{12} \\  0 & u_{22} \end{pmatrix}
+$$
+
+As this is Doolittle factorization, we choose the diagonals of $L$ to be 1, so
+
+$$
+\begin{pmatrix} 1 & -2 \\ -1 & 4 \end{pmatrix}
+=
+\begin{pmatrix} 1 & 0 \\ l_{21} & 1 \end{pmatrix}
+  \begin{pmatrix} u_{11} & u_{12} \\ 0 &  u_{22} \end{pmatrix}
+$$
+
+And at once we see that $u_{11} = 1$ and $u_{12} = -2$. We are left with
+
+$$l_{21}u_{11} = -1 \quad \text{and} \quad l_{21}u_{12} + u_{22} = 4$$
+
+Using the results already obtained, this becomes
+
+$$l_{21} = -1 \quad \text{and} \quad -2l_{21} + u_{22} = 4$$
+
+So $u_{22} = 2$. Now we first solve $Lv = b$ for $v$:
+
+$$
+\begin{pmatrix} 1 & 0 \\ -1 & 1 \end{pmatrix}
+\begin{pmatrix} v_1 \\ v_2 \end{pmatrix}
+=
+\begin{pmatrix} 0 \\ 1 \end{pmatrix}
+$$
+
+So clearly we have $v_1 = 0$ and $v_2 = 1$. Now we solve $Uz = v$:
+
+$$
+\begin{pmatrix} 1 & -2 \\ 0 & 2 \end{pmatrix}
+\begin{pmatrix} x \\ y \end{pmatrix}
+=
+\begin{pmatrix} 0 \\ 1 \end{pmatrix}
+$$
+
+Which gives $x = 1$ and $y = \frac{1}{2}$.
+
+\smallskip
+
+\noindent To calculate $\kappa_{\infty}(A)$, we first need $A^{-1}$, which is 
+
+$$\frac{1}{2}\begin{pmatrix}
+  4 & 2 \\ 1 & 1
+\end{pmatrix}$$
+  
+$||A||_{\infty} = \max\{1 + 2, 1 + 4\} = 5$ and $||A^{-1}||_{\infty} = \max{2 + 1, 1/2 + 1/2} = 3$ so we get
+
+$$\kappa_{\infty}(A) = ||A||\cdot||A^{-1}|| = 15$$.
+
+\section*{3.6 \normalsize Consider the following matrix:}
+
+\[
+A =
+\begin{pmatrix}
+  1 & 1 & 0 \\ 0 & 1 & 1 \\ 1 & 0 & 1
+\end{pmatrix}
+\]
+
+\subsection*{(a) \normalsize Find $A^{-1}$}
+
+Use Gaussian elimination to find the inverse, comparing to the identity matrix:
+
+\[
+\begin{pmatrix}
+  1 & 1 & 0 & 1 & 0 & 0 \\ 0 & 1 & 1 & 0 & 1 & 0 \\ 1 & 0 & 1 & 0 & 0 & 1
+\end{pmatrix}
+\rightarrow
+\begin{pmatrix}
+  1 & 1 & 0 & 1 & 0 & 0 \\ 0 & 1 & 1 & 0 & 1 & 0 \\ 0 & 0 & 2 & -1 & 1 & 1
+\end{pmatrix}
+\rightarrow
+\begin{pmatrix}
+  1 & 1 & 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & \frac{1}{2} & \frac{1}{2} & -\frac{1}{2} \\ 0 & 0 & 1 & -\frac{1}{2} & \frac{1}{2} & \frac{1}{2}
+\end{pmatrix}
+\rightarrow
+\begin{pmatrix}
+  1 & 0 & 0 & \frac{1}{2} & -\frac{1}{2} & \frac{1}{2} \\ 0 & 1 & 0 & \frac{1}{2} & \frac{1}{2} & -\frac{1}{2} \\ 0 & 0 & 1 & -\frac{1}{2} & \frac{1}{2} & \frac{1}{2}
+\end{pmatrix}
+\]
+
+So the inverse is
+
+\[
+  A^{-1} =
+  \begin{pmatrix}
+    \frac{1}{2} & -\frac{1}{2} & \frac{1}{2} \\ 
+    \frac{1}{2} & \frac{1}{2} & -\frac{1}{2} \\
+    -\frac{1}{2} & \frac{1}{2} & \frac{1}{2}
+  \end{pmatrix}
+\]
+
+
+\subsection*{(b) \normalsize Find $\kappa_{\infty}(A)$.}
+
+$$||A|| = \max\{1 + 1, 1 + 1, 1 + 1\} = 2 \quad \text{and} \quad ||A^{-1}|| = \max\{\frac{1}{2} + \frac{1}{2} + \frac{1}{2},\frac{1}{2} + \frac{1}{2} + \frac{1}{2},\frac{1}{2} + \frac{1}{2} + \frac{1}{2}\} = \frac{3}{2}$$
+
+So for the infinity norm value of $\kappa$,
+
+$$\kappa_{\infty} = 2 \cdot \frac{3}{2} = 3$$
+
+
+
+\subsection*{(c) \normalsize Find the Doolittle factorization of $A$.}
+
+In the Doolittle factorization, the diagonal elements of $L$ are all 1.
+
+\[
+A =
+\begin{pmatrix}
+  1 & 1 & 0 \\ 0 & 1 & 1 \\ 1 & 0 & 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+  1 & 0 & 0 \\ l_{21} & 1 & 0 \\ l_{31} & l_{32} & 1
+\end{pmatrix}
+\begin{pmatrix}
+  u_{11} & u_{12} & u_{13} \\ 0 & u_{22} & u_{23} \\ 0 & 0 & u_{33}
+\end{pmatrix}
+\]
+
+So immediately we have $u_{11} = 1$, $u_{12} = 1$, and $u_{13} = 0$. $$l_{21}u_{11} = 0, \quad l_{21}u_{12} + u_{22} = 1, \quad l_{21}u_{13} + u_{23} = 1$$
+
+Which gives $l_{21} = 0$, $u_{22} = 1$, and $u_{23} = 1$. Finally we solve
+
+$$l_{31}u_{11} = 1, \quad l_{31}u_{12} + l_{32}u_{22} = 0, \quad l_{31}u_{13} + l_{32}u_{23} + u_{33} = 1$$
+
+So $l_{31} = 1$, $l_{32} = -1$, and $u_{22} = 2$.
+
+Explicitly written out, we have
+
+\[
+  L = 
+  \begin{pmatrix}
+    1 & 0 & 0 \\ 0 & 1 & 0 \\ 1 & -1 & 1
+  \end{pmatrix}
+  \qquad
+  U =
+  \begin{pmatrix}
+    1 & 1 & 0 \\ 0 & 1 & 1 \\ 0 & 0 & 2
+  \end{pmatrix}
+\]
+
+\section*{3.7(b) \normalsize For the matrix, explain why it's positive definite and find the Cholesky factorization.}
+
+\[\begin{pmatrix}
+  1 & 0 & 0 \\ 0 & 2 & 1 \\ 0 & 1 & 5
+\end{pmatrix}\]
+
+The matrix is clearly symmetric as it's transpose is the same as the matrix. It is strictly diagonal dominant as the diagonal elements are each greater than the sum of all the other elements in each row, and all the diagonal entries are positive, so by a theorem discussed in class, \textbf{this matrix is positive definite.}
+
+The Cholesky Factorization factors a matrix $A$ as $U^T U$, where $U$ is upper triangular, which we write as
+
+\[
+\begin{pmatrix}
+  1 & 0 & 0 \\ 0 & 2 & 1 \\ 0 & 1 & 5
+\end{pmatrix}
+=
+\begin{pmatrix}
+  u_{11} & 0 & 0 \\ u_{12} & u_{22} & 0 \\ u_{13} & u_{23} & u_{33}
+\end{pmatrix}
+\begin{pmatrix}
+  u_{11} & u_{12} & u_{13} \\ 0 & u_{22} & u_{23} \\ 0 & 0 & u_{33}
+\end{pmatrix}
+\]
+
+So immediately 
+
+$$u_{11}^2 = 1 \qquad u_{11}u_{12} = 0 \qquad u_{11}u_{13} = 0$$
+
+$$u_{12}u_{11} = 0 \qquad u_{12}^2 + u_{22}^2 = 2 \qquad u_{12}u_{13} + u_{22}u_{23} = 1$$
+
+$$u_{13}u_{11} = 0 \qquad u_{13}u_{12} + u_{23}u_{22} = 1 \qquad u_{13}^2 + u_{23}^2 + u_{33}^2 = 5$$
+
+\smallskip
+
+gives $u_{11} = 1$, $u_{12} = 0$, and $u_{13} = 0$. This leads to $u_{22} = \sqrt{2}$ and $u_{23} = \frac{1}{\sqrt{2}}$. These results finally give $u_{33} = \frac{3}{\sqrt{2}}$.
+
+Putting this altogether, the Cholesky factorization is
+\[
+\begin{pmatrix}
+  1 & 0 & 0 \\ 0 & \sqrt{2} & 0 \\ 0 & \frac{1}{\sqrt{2}} & \frac{3}{\sqrt{2}}
+\end{pmatrix}
+\begin{pmatrix}
+  1 & 0 & 0 \\ 0 & \sqrt{2} & \frac{1}{\sqrt{2}} \\ 0 & 0 & \frac{3}{\sqrt{2}}
+\end{pmatrix}
+\]
+
+\section*{3.15(a) \normalsize $A$ is $2 \times 2$ matrix; $A_f$ is its floating point approximation. Give an example of an invertible matrix $A$ where $A_f$ is the zero matrix. Should also have $\kappa(A) = 1$.}
+
+
+
+
+\subsection*{(b) \normalsize Give an example of a symmetric and positive definite matrix $A$ where $A_f$ is symmetric but not positive definite.}
+
+
+\section*{3.17 \normalsize Use MATLAB to calculate the values in the table.}
+
+Consider two ways to solve $Ax = b$, where $A = 3P$ and the exact solution $x$ is the 1-vector. Calculate $x_M$ with the backslash operator, and $x_I$ with the inverse formula, and fill in the table.
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{c |c| c | c |c |c}
+  $n$ & $\frac{||x-x_M||}{||x||}$ & $\frac{||x-x_I||}{||x||}$ & $||r||$ & $\kappa(A)$ & $\epsilon\kappa(A)$ \\ [0.8ex]
+\hline 
+  4 &  &  &  &  & \\[0.5ex]\hline 
+  8 &  &  &  &  & \\[0.5ex]\hline 
+  12 &  &  &  &  & \\[0.5ex]\hline 
+  16 &  &  &  &  & \\[0.5ex]
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

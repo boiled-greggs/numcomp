@@ -1,0 +1,227 @@
+
+\documentclass{article}[12pt]
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amsmath, amssymb, mathrsfs}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+\usetikzlibrary{shapes,backgrounds}
+
+\title{Numerical Computing HW 2}
+\author{Greg Stewart}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{2.4}
+
+\subsection*{(a) \normalsize sketch and determine the approximate solution.}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = center,
+]
+%Below the red parabola is defined
+  \addplot [dashed][
+    domain=-1:2, 
+    samples=100, 
+]
+{2 - x^2};
+\addlegendentry{$2 - x^2$}
+%Here the blue parabloa is defined
+\addplot [
+    domain=-1:2, 
+    samples=100, 
+    ]
+    {ln(x)};
+\addlegendentry{$\ln x$}
+ 
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+Clearly, the solution is between $x=1$ and $x=\sqrt{2}$, and more precisely between $x=1$ and $x=1.5$.
+
+\subsection*{(b) \normalsize Pick an interval for bisection method and calculate to $c_1$}
+
+To make things simple, pick $a = 1$ and $b = 2$. So $$c_0 = (1+2)/2 = \frac{3}{2}$$
+
+Now we check for which subinterval to use for the next iteration:
+
+$$f(a)\cdot f(c_0) = (\ln(1) + 1 - 2) (\ln(\frac{3}{2}) + \frac{9}{4} - 2) = -0.655 < 0$$
+
+So the $a : c_0$ interval is the one to choose, which leads to
+
+$$c_1 = \frac{1+\frac{3}{2}}{2} = \frac{5}{4}$$
+
+\subsection*{(c) \normalsize Newton's Method}
+
+Newton's Method is written $$x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)}$$
+
+So for this case, we have
+
+$$x_{i+1} = x_i - \frac{\ln x_i + x_i^2 - 2}{\frac{1}{x_i} + 2x_i}$$
+
+If we pick $x = 1.2$, which appears quite close to the solution, we can calculate $x_1$:
+
+$$x_1 = 1.2 - \frac{\ln(1.2) + 1.2^2 - 2}{\frac{1}{1.2} + 2\cdot 1.2} \approx 1.317$$
+
+\subsection*{(d) \normalsize Secant Method}
+
+The Secant Method is written $$x_{i+1} = x_i - \frac{f(x_i)\cdot (x_i - x_{i-1})}{f(x_i) - f(x_{i-1})}$$
+
+Which comes out to be 
+
+$$x_{i+1} = \frac{(\ln(x_i)+x_i^2-2)\cdot (x_i - x_{i-1})}{(\ln(x_i) + x_i^2 - 2) - (\ln(x_{i-1}) + x_{i-1}^2 -2)}$$
+
+Using $x_0 = 1.1$ and $x_1 = 1.3$, $x_2$ can easily be calculated:
+
+$$x_2 = 1.3 - \frac{(\ln(1.3) + 1.3^2 -2)\cdot (1.3-1.1)}{(\ln(1.3) + 1.3^2 -2)-(\ln(1.1) + 1.1^2 -2)} \approx 1.315$$
+
+\subsection*{(e) \normalsize Actual Calculation}
+
+Using Newton's Method with a starting point of $x = 1.2$, the numerically calculated solution to the problem is $$x = 1.3141$$
+
+I used an error condition of $10^{-9}$ as the need for greater precision was simply not necessary to get four significant digits.
+
+\section*{2.11}
+
+\subsection*{(a) \normalsize When does secant method take less time than newton's method?}
+
+If the starting conditions are right, secant method could take fewer computations than Newton's method---the solution guess would have to be much closer to the real solution than the guess for Newton's method, however, and this seems unlikely.
+
+The other possibility is that the formula used for Newton's method is significantly more complicated, for instance because of a complicated derivative, than the formula for secant method. In this case, it's possible that Newton's method would be greater in time complexity than secant method.
+
+\subsection*{(b) \normalsize Which curve corresponds to Newton's method and which to Bisection?}
+
+$ $
+
+$\rhd$-curve: Newton's Method. The error in this case decreases quadratically, almost exactly.
+
+$\circ$-curve: Bisection Method. The error here takes about four iterations to decrease by one order of magnitude, exactly as bisection method does. 
+
+\section*{2.19}
+
+\subsection*{(a) \normalsize Rewrite the terminal velocity formula as $(RE)^2 c_D = \alpha$.}
+
+Using the fact that $A = \frac{\pi d^2}{4}$ and $(RE)^2 = \frac{\rho^2 v^2 d^2}{\mu^2}$, the equation can easily be rewritten to that form:
+
+\begin{align*}
+  v^2 &= \frac{2mg}{\rho \frac{\pi d^2}{4} c_D} \\
+  &= \frac{8mg}{\pi \rho d^2 c_D} \\
+  \pi \rho v^2 d^2 c_D &= 8mg \\
+  \frac{(Re)^2}{\rho}\mu^2 c_D &= \frac{8mg}{\pi} \\
+  (Re)^2 c_D &= \alpha
+\end{align*}
+
+where $\alpha = \frac{8 \rho mg}{\pi \mu^2}$.
+
+\noindent If $Re$ has been computed, then to calculate the velocity, solve with the definition of $Re$:
+
+$$v = \frac{\mu Re}{\rho d}$$
+
+\subsection*{(b) \normalsize rewrite the equation from (a)}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = center,
+    ymin = -5, ymax = 30,
+    ticks = none
+]
+%Below the red parabola is defined
+  \addplot [dashed][
+    domain=-1:1, 
+    samples=100, 
+]
+  {(120 + 120*x^(1/2) + 32*x + 2*x^(3/2))/(5 + 5*x^(1/2))};
+\addlegendentry{$c_D Re$}
+%Here the blue parabloa is defined
+\addplot [
+    domain=-1:1, 
+    samples=100, 
+    ]
+    {.6/x};
+  \addlegendentry{$\frac{\alpha}{Re}$}
+ 
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+$$c_D Re = \alpha / Re$$
+
+$$\frac{120Re + 120 Re^{3/2} + 32 Re^2 + 2 Re^{5/2}}{5 + 5 \sqrt{Re}} = \alpha$$
+$$\frac{120 + 120 Re^{1/2} + 32 Re + 2 Re^{3/2}}{5 + 5 \sqrt{Re}} = \frac{\alpha}{Re}$$
+
+When $x=0$, the LHS of this is equal to 24, so we can set the right side to get a bound on $Re$.
+
+$$24 = \frac{\alpha}{Re}$$
+
+$$Re = \frac{\alpha}{24}$$
+
+So the bounds for possible $Re$-values is $0 < Re < \frac{\alpha}{24}$.
+
+\subsection*{(c) \normalsize Newton's Method.}
+
+In this case, we have 
+
+$$f(Re) = \frac{120Re + 120Re^{3/2} + 32Re^2 + 2Re^{5/2}}{5 + 5\sqrt{Re}} - \alpha$$
+
+$$f'(Re) = \frac{120 + 240\sqrt{Re} + 184Re + 53Re^{3/2} + 4Re^2}{5 + 10\sqrt{Re} + 5Re}$$
+
+So now using Newton's Method, i.e.
+
+$$x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)}$$
+
+We write
+
+$$Re_{i+1} = Re_i - \frac{\frac{120Re + 120Re^{3/2} + 32Re^2 + 2Re^{5/2}}{5 + 5\sqrt{Re}} - \alpha}{\frac{120 + 240\sqrt{Re} + 184Re + 53Re^{3/2} + 4Re^2}{5 + 10\sqrt{Re} + 5Re}}$$
+
+
+While this could be simplified further, MATLAB has no need for such simplification.
+
+\smallskip
+
+A good starting point would be much closer to $Re = 0$ than $Re = \frac{\alpha}{24}$, so choose $\frac{\alpha}{1000}$ for the starting point.
+
+\subsection*{(d) \normalsize Do the same thing for the secant method.}
+
+The Secant Method is $$x_{i+1} = x_i - \frac{f(x_i)\cdot (x_i - x_{i-1})}{f(x_i) - f(x_{i-1})}$$
+
+So in this case we have
+
+$$Re_{i+1} = Re_i - \frac{(Re_i - Re_{i-1})\cdot (\frac{120Re_i + 120Re_i^{3/2} + 32Re_i^2 + 2Re_i^{5/2}}{5 + 5\sqrt{Re_i}} - \alpha)}{(\frac{120Re_i + 120Re_i^{3/2} + 32Re_i^2 + 2Re_i^{5/2}}{5 + 5\sqrt{Re_i}}) - (\frac{120Re_{i-1} + 120Re_{i-1}^{3/2} + 32Re_{i-1}^2 + 2Re_{i-1}^{5/2}}{5 + 5\sqrt{Re_{i-1}}})}$$
+
+which again seems rather complicated, but again MATLAB doesn't care. For starting points, pick $Re_0 = 100$ and $Re_1 = \frac{\alpha}{1000}$ as they are fairly close to the rough guess of the solution, and should act as a good approximation of a tangent line.
+
+\subsection*{(e) \normalsize Use the data to get $v_T$ of a baseball}
+
+Using MATLAB and Newton's Method---used for its rapid (quadratic) reduction in error and ease of coding---with an error cutoff of $10^{-15}$ to get the best result possible, the calculated value of $Re$ was $Re = 1.767\times 10^{5}$. This can be set equal to the formula for $Re$ to solve for $v$ as follows:
+
+$$v = \frac{\mu Re}{\rho d}$$
+
+$$v = 35.343 m\cdot s^{-1}$$
+
+A rough average for the velocity of a fastball is $42 m \cdot s^{-1}$, which is a bit faster than terminal velocity. This makes sense, though, since there is likely a stronger force than gravity at work in the form of the pitcher's arm.
+
+\subsection*{(f) \normalsize Can the terminal velocity approach the speed of sound?}
+
+No, this isn't possible. Either the size of the baseball would have to be significantly decreased (so it wouldn't be a baseball), or the viscosity and density of air would have to change significantly, which of course will not happen. It would be impossible to alter the terminal velocity by changing the material that composes the baseball because velocity is not dependent on mass here.
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
