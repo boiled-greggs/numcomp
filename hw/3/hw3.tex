@@ -239,6 +239,33 @@ Putting this altogether, the Cholesky factorization is
 
 \subsection*{(b) \normalsize Give an example of a symmetric and positive definite matrix $A$ where $A_f$ is symmetric but not positive definite.}
 
+An example of this is 
+
+\[
+  A = 
+  \begin{pmatrix}
+    10^{-324} & 0 \\ 0 & 1
+  \end{pmatrix}
+\]
+which gives 
+\[
+  A_f = 
+  \begin{pmatrix}
+    0 & 0 \\ 0 & 1
+  \end{pmatrix}
+\]
+And clearly $A_f$ is not positive definite. Another example of this is 
+
+\[ A =
+\begin{pmatrix} 
+  1 + 10^{-16} & 1 - 10^{-16} \\ 1 - 10^{-16} & 1 + 10^{-16}
+\end{pmatrix}
+\qquad \text{so} \qquad 
+A_f =
+\begin{pmatrix}
+  1 & 1 \\ 1 & 1
+\end{pmatrix}
+\]
 
 \section*{3.17 \normalsize Use MATLAB to calculate the values in the table.}
 
